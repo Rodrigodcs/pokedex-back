@@ -31,3 +31,19 @@ export async function signIn (email:string,password:string): Promise<string> {
   await sessionRepository.insert({userId:user.id,token})
   return token
 }
+
+export async function autenticate(token:string){
+  const sessionRepository = getRepository(Session)
+
+  const session = await sessionRepository.findOne({
+    where:{
+      token
+    },
+    relations:["user"]
+  })
+
+  if(!session){
+    return null
+  }
+  return session.user
+}

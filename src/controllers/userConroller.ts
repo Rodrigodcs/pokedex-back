@@ -11,7 +11,6 @@ export async function signUp (req: Request, res: Response) {
     }
     const {email,password,confirmPassword}=req.body as {email:string;password:string;confirmPassword:string}
     if(password!==confirmPassword){
-      console.log("embassou")
       return res.sendStatus(400)
     }
     const create = await userService.signUp(email,password);

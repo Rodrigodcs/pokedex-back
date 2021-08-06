@@ -54,8 +54,6 @@ describe("POST /sign-up", () => {
 
     expect(response.status).toBe(409);
   });
-
-
 });
 
 describe("POST /sign-in", () => {

@@ -1,8 +1,10 @@
 import { getRepository } from "typeorm";
 import faker from "faker"
 import bcrypt from "bcrypt"
+import {v4 as uuid} from "uuid"
 
 import User from "../../src/entities/User";
+import Session from "../../src/entities/Session";
 
 export function createUserBody () {
   const password = faker.internet.password();
@@ -29,4 +31,19 @@ export async function createUser () {
   await getRepository(User).save(userSaved);
 
   return user;
+}
+
+export async function userSignIn(){
+  await createUser()
+
+  const user = await getRepository(User).findOne()
+
+  const token = uuid();
+
+  const session = await getRepository(Session).create({
+    userId:user.id,
+    token
+  });
+  await getRepository(Session).save(session)
+  return session
 }
