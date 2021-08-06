@@ -2,15 +2,14 @@ import { getRepository } from "typeorm";
 import Pokemon from "../entities/Pokemon";
 import UserPokemon from "../entities/UserPokemon";
 
-
-
 export async function getPokemons(userId:number){
     const usersPokemonsRepository = getRepository(UserPokemon)
-    const pokemonsFromUser = await usersPokemonsRepository.find({userId})
-    console.log("pokemonsFromUser",pokemonsFromUser)
     const pokemonRepository = getRepository(Pokemon)
+
+    const pokemonsFromUser = await usersPokemonsRepository.find({userId})
+    const myPokemonsIds = pokemonsFromUser.map(m=>m.pokemonId)
+    
     const pokemons = await pokemonRepository.find()
-    console.log("pokemons",pokemons)
 
     const mappedPokemons = pokemons.map(p=>{
         return {
@@ -22,14 +21,10 @@ export async function getPokemons(userId:number){
             height:p.height,
             baseExp:p.baseExp,
             description:p.description,
-            inMyPokemons: pokemonsFromUser.find(myPokemon=>myPokemon.id===p.id)?true:false
+            inMyPokemons: myPokemonsIds.includes(p.id)
         }
     })
-    console.log("mappedPokemons",mappedPokemons)
-
-
-
-    return pokemons
+    return mappedPokemons
 }
 
 export async function addPokemon(userId:number,pokemonId:number){

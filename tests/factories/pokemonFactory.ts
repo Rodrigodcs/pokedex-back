@@ -1,8 +1,5 @@
 import { getRepository } from "typeorm";
-import faker from "faker"
-import bcrypt from "bcrypt"
 
-import UserPokemon from "../../src/entities/UserPokemon";
 import Pokemon from "../../src/entities/Pokemon";
 
 export async function createPokemon () {
